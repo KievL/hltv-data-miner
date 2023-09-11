@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+*.txt
+*.json
+
 # C extensions
 *.so
 
@@ -160,5 +163,3 @@ cython_debug/
 #.idea/
 
 
-properties.txt
-matches.json
