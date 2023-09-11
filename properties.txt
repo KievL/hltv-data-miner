@@ -1,2 +1,2 @@
 chrome_path=
-hltv_result_pages_desired=1
+hltv_result_pages_desired=4
