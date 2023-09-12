@@ -1,4 +1,4 @@
-import web_scrapper
+import web_scraper
 import open_browser
 import end_scrap
 import multiprocessing
@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
         browser_Process = multiprocessing.Process(target=open_browser.exec_browser, args=(queue2,))
         end_Process = multiprocessing.Process(target=end_scrap.end_key, args=(queue,))
-        scrapper_Process = multiprocessing.Process(target=web_scrapper.scrap, args=(queue,queue2))  
+        scrapper_Process = multiprocessing.Process(target=web_scraper.scrap, args=(queue,queue2))  
 
         browser_Process.start()  
         queue2.put(chrome_path)

@@ -166,4 +166,5 @@ cython_debug/
 properties.txt
 matches.json
 
+clear_to_git.py
 
