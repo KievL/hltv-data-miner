@@ -1,2 +1,0 @@
-chrome_path=
-hltv_result_pages_desired=2
