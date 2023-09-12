@@ -160,6 +160,10 @@ cython_debug/
 #.idea/
 
 #Config files
+*.txt
+*.json
 
+properties.txt
+matches.json
 
 
