@@ -6,6 +6,7 @@ import json
 from multiprocessing import Queue
  
 def get_result_page(page_url: str, queue: Queue) -> str:
+    #Wait till browser is ready to work
     while queue.get() =='wait_browser':
         pass
 
@@ -28,13 +29,14 @@ def get_result_page(page_url: str, queue: Queue) -> str:
 def scrap(queue: Queue, queue2: Queue):      
     matches_href = []
     
-    #Start queue
+    #Start the scrap
     allow_to_go = queue2.get()
     if allow_to_go=='cancel':
         return
 
     hltv_pages_desired = queue.get()
 
+    #Get every match of each hltv result page (100 matches per page)
     for page in range(hltv_pages_desired):
         attempts = 0
         while True: 
@@ -45,7 +47,7 @@ def scrap(queue: Queue, queue2: Queue):
                 results_target = page_html.find(class_='results-holder allres')
                 results_sublist = results_target.find_all(class_='results-sublist')                
             except Exception as e:                                
-                print("Aconteceu o erro ", e, ". Tentando novamente.")
+                print("An error occurred: ", e, ". Trying again...")
                 attempts=attempts+1
             else:
                 break
@@ -65,10 +67,13 @@ def scrap(queue: Queue, queue2: Queue):
 
     with open("matches.json", "r") as f1:
         matches_ondisk = json.load(f1)
+
+        #Scraping each match from matches_href list
         for i in range(len(matches_href)):                
             current_match = {}
             href_id = matches_href[i]
 
+            #Check if ESC (Cancel scrap) was pressed
             try:                
                 stop_message = queue.get_nowait()
                 if stop_message == "end":
@@ -77,7 +82,7 @@ def scrap(queue: Queue, queue2: Queue):
             except:
                 pass
 
-            #Check if the match ir already on json. If it's not in, the match data will be scrapped
+            #Check if the match ir already on json. If it's not in, the match page will be scraped
             if href_id in matches_ondisk:
                 current_match = matches_ondisk[href_id]
             else:
@@ -284,7 +289,8 @@ def scrap(queue: Queue, queue2: Queue):
                         #HtH wins and overtimes
                         hth = match_html.find(class_="head-to-head")
                         hth_info = hth.find_all(class_="bold")
-                            ## Wins T1 - Overtimes - Wins T2
+                        
+                        ## Wins T1 - Overtimes - Wins T2
                         current_match['hth_wins_t1'] = int(hth_info[0].text)
                         current_match['hth_wins_t2'] = int(hth_info[2].text)
                         current_match['hth_overtimes'] = int(hth_info[1].text)

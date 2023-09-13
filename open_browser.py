@@ -7,18 +7,21 @@ def exec_browser(queue):
     chrome_path = queue.get()
     
     try:
+        #Get number of Chromes oppened before the scrap
         window1 = gw.getWindowsWithTitle("Google Chrome")
 
-        browser_process = subprocess.Popen(chrome_path) 
+        subprocess.Popen(chrome_path) 
         time.sleep(3)
-
+        
         queue.put('ready_to_start')
-        counter = 0
 
         while True: 
-            window2 = gw.getWindowsWithTitle("Google Chrome")           
+            #Get the number of Chromes oppened while the scrap is being executed
+            window2 = gw.getWindowsWithTitle("Google Chrome")   
+
+            # if len(window2)<=len(window1), means that the chrome oppened to scrap was closed for some reason        
             if len(window2)<=len(window1) :
-                browser_process = subprocess.Popen(chrome_path) 
+                subprocess.Popen(chrome_path) 
                 queue.put('wait_browser')
                 time.sleep(3)
             else:
